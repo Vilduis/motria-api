@@ -2,7 +2,6 @@ package com.motria.security;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 
-/** Nombres de los claims propios del JWT de Motria y cómo leerlos. */
 public final class TokenClaims {
 
     public static final String AUTHORITIES = "authorities";

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 
-/** Envía los correos transaccionales (SMTP de Resend). */
 @Slf4j
 @Service
 @RequiredArgsConstructor

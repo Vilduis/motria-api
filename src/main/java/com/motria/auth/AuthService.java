@@ -33,7 +33,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final CurrentUser currentUser;
 
-    /** Registra un taller nuevo junto con la cuenta de su administrador y devuelve la sesión iniciada. */
     @Transactional
     public TokenResponse registerWorkshop(RegisterWorkshopRequest request) {
         Workshop workshop = workshopService.create(request);

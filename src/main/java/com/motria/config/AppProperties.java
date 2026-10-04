@@ -10,10 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import java.time.Duration;
 import java.util.List;
 
-/**
- * Propiedades propias de la aplicación (prefijo {@code app} en application.yaml).
- * Si falta un valor obligatorio, la aplicación no arranca y lo indica en el log.
- */
 @Validated
 @ConfigurationProperties(prefix = "app")
 public record AppProperties(

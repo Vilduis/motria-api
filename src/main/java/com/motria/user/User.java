@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/** Cuenta con la que se inicia sesión (administrador del taller o técnico). */
 @Entity
 @Table(name = "users")
 @Getter

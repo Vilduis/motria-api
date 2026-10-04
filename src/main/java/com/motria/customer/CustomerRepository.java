@@ -12,6 +12,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByIdAndWorkshopId(Long id, Long workshopId);
 
+    boolean existsByWorkshopIdAndEmailIgnoreCase(Long workshopId, String email);
+
+    boolean existsByWorkshopIdAndEmailIgnoreCaseAndIdNot(Long workshopId, String email, Long id);
+
     long countByWorkshopId(Long workshopId);
 
     long countByWorkshopIdAndCreatedAtBetween(Long workshopId, LocalDateTime from, LocalDateTime to);

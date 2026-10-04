@@ -11,11 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CustomerService {
+
+    private static final String DUPLICATE_EMAIL = "Ya existe un cliente con ese email";
 
     private final CustomerRepository customerRepository;
     private final VehicleRepository vehicleRepository;
@@ -35,6 +38,10 @@ public class CustomerService {
 
     @Transactional
     public CustomerResponse create(CustomerRequest request) {
+        String email = normalizeEmail(request.email());
+        if (email != null && customerRepository.existsByWorkshopIdAndEmailIgnoreCase(currentUser.workshopId(), email)) {
+            throw new BusinessException(DUPLICATE_EMAIL);
+        }
         Customer customer = new Customer();
         customer.setWorkshop(workshopService.currentWorkshopReference());
         applyChanges(customer, request);
@@ -44,6 +51,10 @@ public class CustomerService {
     @Transactional
     public CustomerResponse update(Long id, CustomerRequest request) {
         Customer customer = getInCurrentWorkshop(id);
+        String email = normalizeEmail(request.email());
+        if (email != null && customerRepository.existsByWorkshopIdAndEmailIgnoreCaseAndIdNot(currentUser.workshopId(), email, id)) {
+            throw new BusinessException(DUPLICATE_EMAIL);
+        }
         applyChanges(customer, request);
         return CustomerResponse.from(customer);
     }
@@ -57,7 +68,6 @@ public class CustomerService {
         customerRepository.delete(customer);
     }
 
-    /** Busca un cliente del taller actual. Lo usan otros módulos (vehículos, órdenes). */
     public Customer getInCurrentWorkshop(Long id) {
         return customerRepository.findByIdAndWorkshopId(id, currentUser.workshopId())
                 .orElseThrow(() -> ResourceNotFoundException.of("el cliente", id));
@@ -67,6 +77,13 @@ public class CustomerService {
         customer.setName(request.name());
         customer.setLastName(request.lastName());
         customer.setPhone(request.phone());
-        customer.setEmail(request.email());
+        customer.setEmail(normalizeEmail(request.email()));
+    }
+
+    private static String normalizeEmail(String email) {
+        if (email == null || email.isBlank()) {
+            return null;
+        }
+        return email.strip().toLowerCase(Locale.ROOT);
     }
 }

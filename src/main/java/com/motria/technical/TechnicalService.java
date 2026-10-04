@@ -88,7 +88,6 @@ public class TechnicalService {
         userRepository.delete(account);
     }
 
-    /** Busca un técnico del taller actual. Lo usan las órdenes de servicio y el dashboard. */
     public Technical getInCurrentWorkshop(Long id) {
         return technicalRepository.findByIdAndWorkshopId(id, currentUser.workshopId())
                 .orElseThrow(() -> ResourceNotFoundException.of("el técnico", id));

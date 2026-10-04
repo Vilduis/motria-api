@@ -2,7 +2,6 @@
 application-local.yaml
 .env
 
-# Salida de compilación e IDE
 target/
 .idea/
 *.iml

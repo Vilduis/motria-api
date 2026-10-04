@@ -19,6 +19,10 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     boolean existsByCustomerId(Long customerId);
 
+    boolean existsByWorkshopIdAndPlate(Long workshopId, String plate);
+
+    boolean existsByWorkshopIdAndPlateAndIdNot(Long workshopId, String plate, Long id);
+
     long countByWorkshopId(Long workshopId);
 
     long countByWorkshopIdAndCreatedAtBetween(Long workshopId, LocalDateTime from, LocalDateTime to);

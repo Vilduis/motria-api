@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** Técnico del taller. Cada técnico tiene su propia cuenta de usuario para iniciar sesión. */
 @Entity
 @Table(name = "technicals")
 @Getter

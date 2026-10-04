@@ -1,6 +1,3 @@
-# ─────────────────────────────────────────────
-# STAGE 1: Build con Maven
-# ─────────────────────────────────────────────
 FROM maven:3.9-eclipse-temurin-25 AS build
 
 WORKDIR /app
@@ -17,14 +14,10 @@ RUN mvn -B -q clean package -DskipTests
 # reutilice la capa de dependencias entre despliegues.
 RUN java -Djarmode=tools -jar target/*.jar extract --layers --launcher --destination extracted
 
-# ─────────────────────────────────────────────
-# STAGE 2: Imagen final liviana solo con JRE
-# ─────────────────────────────────────────────
 FROM eclipse-temurin:25-jre
 
 WORKDIR /app
 
-# No ejecutar como root
 RUN useradd --system --no-create-home spring
 USER spring
 

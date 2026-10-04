@@ -21,7 +21,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final CurrentUser currentUser;
 
-    /** Crea una cuenta con un único rol. Lo usan el registro de talleres y el alta de técnicos. */
     @Transactional
     public User createAccount(String email, String rawPassword, Workshop workshop, String role, boolean mustChangePassword) {
         if (userRepository.existsByEmailIgnoreCase(email)) {

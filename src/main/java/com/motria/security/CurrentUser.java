@@ -7,10 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
-/**
- * Datos del usuario autenticado en la petición actual, leídos del JWT.
- * Reemplaza al antiguo TenantContext: ya no hay ThreadLocal que limpiar a mano.
- */
+/** Datos del usuario autenticado en la petición actual, leídos del JWT. */
 @Component
 public class CurrentUser {
 

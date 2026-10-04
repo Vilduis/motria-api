@@ -35,6 +35,10 @@ public interface ServiceOrderRepository extends JpaRepository<ServiceOrder, Long
 
     boolean existsByVehicleId(Long vehicleId);
 
+    Optional<ServiceOrder> findFirstByVehicleIdAndStatusNot(Long vehicleId, OrderStatus status);
+
+    Optional<ServiceOrder> findFirstByVehicleIdAndStatusNotAndIdNot(Long vehicleId, OrderStatus status, Long id);
+
     boolean existsByTechnicalId(Long technicalId);
 
     long countByWorkshopIdAndStatus(Long workshopId, OrderStatus status);

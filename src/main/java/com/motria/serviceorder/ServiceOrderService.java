@@ -50,6 +50,8 @@ public class ServiceOrderService {
 
     @Transactional
     public ServiceOrderResponse create(ServiceOrderRequest request) {
+        serviceOrderRepository.findFirstByVehicleIdAndStatusNot(request.vehicleId(), OrderStatus.TERMINADO)
+                .ifPresent(ServiceOrderService::rejectOpenOrder);
         ServiceOrder order = new ServiceOrder();
         order.setWorkshop(workshopService.currentWorkshopReference());
         order.setDate(request.date() != null ? request.date() : LocalDateTime.now(clock));
@@ -61,6 +63,8 @@ public class ServiceOrderService {
     @Transactional
     public ServiceOrderResponse update(Long id, ServiceOrderRequest request) {
         ServiceOrder order = getInCurrentWorkshop(id);
+        OrderStatus newStatus = request.status() != null ? request.status() : order.getStatus();
+        ensureNoOtherOpenOrder(request.vehicleId(), id, newStatus);
         applyChanges(order, request);
         if (request.status() != null) {
             order.setStatus(request.status());
@@ -75,6 +79,7 @@ public class ServiceOrderService {
         if (!currentUser.isAdmin() && !order.isAssignedTo(currentUser.userId())) {
             throw new AccessDeniedException("Solo puedes cambiar el estado de tus órdenes asignadas");
         }
+        ensureNoOtherOpenOrder(order.getVehicle().getId(), id, status);
         order.setStatus(status);
         return ServiceOrderResponse.from(order);
     }
@@ -87,6 +92,20 @@ public class ServiceOrderService {
     private ServiceOrder getInCurrentWorkshop(Long id) {
         return serviceOrderRepository.findByIdAndWorkshopId(id, currentUser.workshopId())
                 .orElseThrow(() -> ResourceNotFoundException.of("la orden de servicio", id));
+    }
+
+    /** Un vehículo solo puede tener una orden sin terminar a la vez (las terminadas forman su historial). */
+    private void ensureNoOtherOpenOrder(Long vehicleId, Long orderId, OrderStatus status) {
+        if (status == OrderStatus.TERMINADO) {
+            return;
+        }
+        serviceOrderRepository.findFirstByVehicleIdAndStatusNotAndIdNot(vehicleId, OrderStatus.TERMINADO, orderId)
+                .ifPresent(ServiceOrderService::rejectOpenOrder);
+    }
+
+    private static void rejectOpenOrder(ServiceOrder openOrder) {
+        throw new BusinessException("El vehículo ya tiene una orden sin terminar (orden #" + openOrder.getId()
+                + ", " + openOrder.getStatus() + "). Termínala antes de abrir otra");
     }
 
     /** Las búsquedas ya filtran por taller, así que no se puede asignar nada de otro taller. */

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 import java.time.Instant;
 
-/** Emite los JWT que el frontend envía en el header {@code Authorization: Bearer ...}. */
 @Service
 @RequiredArgsConstructor
 public class TokenService {

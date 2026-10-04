@@ -17,7 +17,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/** Token de un solo uso enviado por correo para restablecer la contraseña. */
 @Entity
 @Table(name = "password_reset_tokens")
 @Getter

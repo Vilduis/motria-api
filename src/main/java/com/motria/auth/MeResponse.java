@@ -1,6 +1,5 @@
 package com.motria.auth;
 
-/** Datos del usuario que tiene la sesión abierta (GET /auth/me). */
 public record MeResponse(
         Long userId,
         String email,

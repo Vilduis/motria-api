@@ -1,6 +1,5 @@
 package com.motria.user;
 
-/** Vista reducida de la cuenta, usada dentro de otras respuestas (por ejemplo, la de un técnico). */
 public record UserSummary(
         Long id,
         String email,
