@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: motria-api
+
+  # Valores locales (contraseñas, API keys). El archivo está en .gitignore.
+  config:
+    import: optional:file:./application-local.yaml
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/motria_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
+
+  jpa:
+    # El esquema lo gestiona Flyway; Hibernate solo verifica que las entidades coincidan.
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: false
+
+  flyway:
+    locations: classpath:db/migration
+
+  mail:
+    host: smtp.resend.com
+    port: 587
+    username: resend
+    password: ${RESEND_API_KEY:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  servlet:
+    context-path: /api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+springdoc:
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /docs-json
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:}
+    expiration: ${JWT_EXPIRATION:3h}
+  mail:
+    from: autotaller@vilduis.com
+    from-name: Motria
+  frontend-url: ${APP_FRONTEND_URL:http://localhost:5173}
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:5173}
