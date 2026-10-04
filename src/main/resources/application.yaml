@@ -36,6 +36,8 @@ spring:
       enabled: true
 
 server:
+  # Render (y otros PaaS) asignan el puerto en la variable PORT.
+  port: ${PORT:8080}
   servlet:
     context-path: /api
 

@@ -1,0 +1,15 @@
+# Secretos locales: nunca deben entrar en la imagen
+application-local.yaml
+.env
+
+# Salida de compilación e IDE
+target/
+.idea/
+*.iml
+.vscode/
+
+.git/
+.mvn/
+mvnw
+mvnw.cmd
+HELP.md
